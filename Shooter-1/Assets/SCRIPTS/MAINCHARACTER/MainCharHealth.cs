@@ -23,5 +23,16 @@ public class MainCharHealth : MonoBehaviour
     {
         Debug.Log("Player has died.");
         SceneManager.LoadScene("Menu");
+        Cursor.lockState = CursorLockMode.None;
+    }
+    public void Heal(int healAmount)
+    { 
+    currentHealth += healAmount;
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
+        Debug.Log("Player healed: " + healAmount + ". Current health: " + currentHealth);
+
     }
 }   

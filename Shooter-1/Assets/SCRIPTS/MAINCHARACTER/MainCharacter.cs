@@ -3,7 +3,11 @@ using UnityEngine;
 public class MainCharacter : MonoBehaviour
 {
     public float walkSpeed = 5f;
+    public bool isWalking = false;
     public float runSpeed = 10f;
+    public bool isRunning;
+    public float moveHorizontal;
+    public float moveVertical;
 
     public float maxStamina = 5f;          
     public float staminaDrainRate = 1f;     
@@ -48,22 +52,29 @@ public class MainCharacter : MonoBehaviour
 
 
 
-        bool isRunning = Input.GetKey(KeyCode.LeftShift) && currentStamina > 0f&& canRun;
+         isRunning = Input.GetKey(KeyCode.LeftShift) && currentStamina > 0f&& canRun;
         float speed = isRunning ? runSpeed : walkSpeed;
 
         if (currentStamina <= 0f)
         {
             canRun = false; 
-        }
+        }   
         else if (currentStamina == maxStamina)
         {
             canRun = true; 
         }
 
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
+         moveHorizontal = Input.GetAxis("Horizontal");
+         moveVertical = Input.GetAxis("Vertical");
         Vector3 move = transform.right * moveHorizontal + transform.forward * moveVertical;
-
+        if (move.magnitude > 0.1f)
+        {
+            isWalking = true;
+        }
+        else
+        {
+            isWalking = false;
+        }
         controller.Move(move * speed * Time.deltaTime);
 
         // Manejo de stamina

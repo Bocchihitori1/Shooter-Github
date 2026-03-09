@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class EnemyAttack : MonoBehaviour
@@ -5,6 +6,7 @@ public class EnemyAttack : MonoBehaviour
     public int damageAmount;
     public int rateDamage;
     public float attackRange;
+    private bool canAttack = true;
 
     public GameObject attackPoint;
     public LayerMask playerLayers;
@@ -20,9 +22,10 @@ public class EnemyAttack : MonoBehaviour
             if (hit.collider.CompareTag("Player"))
             {
               MainCharHealth mainCharHealth = hit.collider.GetComponent<MainCharHealth>();
-                if (mainCharHealth != null)
+                if (mainCharHealth != null && canAttack ==true)
                 {
                     mainCharHealth.takeDamage(damageAmount);
+                    StartCoroutine(ResetAttack());
                 }
             }
 
@@ -31,7 +34,12 @@ public class EnemyAttack : MonoBehaviour
         }
 
     }
-
+    private IEnumerator ResetAttack()
+    {
+        canAttack = false;
+        yield return new WaitForSeconds(rateDamage);
+        canAttack = true;
+    }
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
